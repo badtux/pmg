@@ -1,21 +1,12 @@
 <?php
-<<<<<<< HEAD
-=======
 namespace App;
 use Core\Log;
 
->>>>>>> nics
 class Job {
 	const STATUS_EXPIRED = 'expired';
 	const STATUS_VALID = 'valid';
 
 	private $_id = null;
-<<<<<<< HEAD
-
-	private $_expire_time = null;
-
-	private $_ref = null;
-=======
 	private $_expire_time = null;
 	private $_ref = null;
 	
@@ -31,8 +22,7 @@ class Job {
 		$job_handle = $client->doBackground(app_name.'handle', serialize($job));
 		Log::write(__METHOD__.' invoked gearman job ('.$function.') for id ' . $id
 				.' '.app_name.'handle'.' '.$client->returnCode());
-	}	
->>>>>>> nics
+	}
 
 	public function getId() {
 		return $this->_id;
