@@ -114,7 +114,7 @@ abstract class Ctrl {
 		header('Loation:/dash');
 	}
 
-	protected function isAuthenticated($passBack=false) {
+	protected function isAuthenticated($passBack=false, $object = false, $className = false) {
 		//Log::write(__METHOD__.' '. $passBack);
 		if ($className !== false && strlen($className)) {
 			if (class_exists($className) && is_a($object, $className)) {
