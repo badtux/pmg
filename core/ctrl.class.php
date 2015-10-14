@@ -114,16 +114,19 @@ abstract class Ctrl {
 		header('Loation:/dash');
 	}
 
-	protected function isAuthenticated($passBack=false) {
+	protected function isAuthenticated($passBack=false, $object = false, $className = false) {
 		//Log::write(__METHOD__.' '. $passBack);
-		if($this->__sessionOwner instanceof Page_PageV2) { return true; }
+		if ($className !== false && strlen($className)) {
+			if (class_exists($className) && is_a($object, $className)) {
+				return true;
+			}
+		}
+		else if($this->__sessionOwner instanceof Page_PageV2) { return true; }
 		$redirectMessage = array('auth required',$this->__pmg_request->is_xmlHttpRequest?'json':'header');
+
 		if($passBack && is_string($passBack)) {
-			//Log::write(__METHOD__.' need login adding pb');
 			array_push($redirectMessage, $passBack);
 		}
-
-		//Log::write(__METHOD__.' throw 401 with '.implode('-',$redirectMessage));
 		throw new Exception(implode('-',$redirectMessage), 401);
 	}
 
