@@ -461,8 +461,8 @@ class Utils {
 		}
 	}
 
-	public static function time_more_days_to_go(DateTime $timeInFuture, $timeNow = true) {
-		$timeNow = ($timeNow instanceof DateTime)?$timeNow:new DateTime();
+	public static function time_more_days_to_go(\DateTime $timeInFuture, $timeNow = true) {
+		$timeNow = ($timeNow instanceof \DateTime)?$timeNow:new \DateTime();
 		$gap = date_diff($timeNow, $timeInFuture,false); $out = array(0,0);
 
 		if ($gap->invert == 1){ return array(0,'days'); }
