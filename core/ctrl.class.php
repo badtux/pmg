@@ -16,7 +16,6 @@ abstract class Ctrl {
 	protected $__geo = null;
 	
 	protected function validateInputs($fields){
-		error_log(__METHOD__);
 		foreach ($fields as $field => $fieldInfo){
 			foreach (explode(',', $fieldInfo[1]) as $ruleString) {
 				
@@ -34,9 +33,8 @@ abstract class Ctrl {
 						break;
 						
 					case 'requiredif':
-						if(!$this->hasParam($op) || ($this->hasParam($op) && $this->getParam($op) == '')
-							&& !$this->hasParam($field) || ($this->hasParam($field) && $this->getParam($field) == '' && $val == false)
-							|| ($val !== false && $this->hasParam($op) && $this->getParam($op) === $val && $this->hasParam($op) && $this->getParam($op) == '')){
+						if(($this->hasParam($op) && $this->getParam($op) != '')
+							&& (!$this->hasParam($field) || ($this->getParam($field) == '' && $val == false) || ($val !== false && $this->getParam($op) === $val)) ) {
 							throw new Exception ($fieldInfo[0].' needs a value');
 						}
 						break;
