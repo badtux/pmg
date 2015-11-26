@@ -34,7 +34,7 @@ abstract class Ctrl {
 						
 					case 'requiredif':
 						if(($this->hasParam($op) && $this->getParam($op) != '')
-							&& (!$this->hasParam($field) || ($this->getParam($field) == '' && $val == false) || ($val !== false && $this->getParam($op) === $val)) ) {
+							&& (!$this->hasParam($field) || ($this->getParam($field) == '' && $val == false) || ($val !== false && $this->getParam($op) === $val && $this->getParam($field) == '')) ) {
 							throw new Exception ($fieldInfo[0].' needs a value');
 						}
 						break;
