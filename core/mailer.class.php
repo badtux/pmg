@@ -113,11 +113,12 @@ class Mailer {
 	 */
 	private static function sendIt($mail){
 		$mailerState = self::sendMail(
-				array(
+/*				array(
 						'to' => $mail['recp'],
 						'cc' => (isset($mail['cc']) ? $mail['cc'] : array()),
 						'bcc' => (isset($mail['bcc']) ? $mail['bcc'] : array())
-				),
+				),*/
+				$mail['recp'],
 				$mail['subj'],
 				$mail['body'],
 				$mail['type'] == self::MAIL_TYPE_HTML,
