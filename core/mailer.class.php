@@ -190,6 +190,8 @@ class Mailer {
 				else {
 					foreach($recipients as $kind => $addresses) {
 						foreach($addresses as $address) {
+							Log::write(__METHOD__, $kind.' --> '.$address['toEmail'].' > '. $address['toName']);
+							
 							if($kind === 'to') {
 								$mail->AddAddress($address['toEmail'], $address['toName']);
 							}
