@@ -190,16 +190,14 @@ class Mailer {
 				else {
 					foreach($recipients as $kind => $addresses) {
 						foreach($addresses as $address) {
-							Log::write(__METHOD__, $kind.' --> '.$address['toEmail'].' > '. $address['toName']);
-							
 							if($kind === 'to') {
-								$mail->AddAddress($address['toEmail'], $address['toName']);
+								$mail->AddAddress($address['toMail'], $address['toName']);
 							}
 							elseif($kind === 'cc') {
-								$mail->AddCC($address['toEmail'], $address['toName']);
+								$mail->AddCC($address['toMail'], $address['toName']);
 							}
 							else {
-								$mail->AddBCC($address['toEmail'], $address['toName']);
+								$mail->AddBCC($address['toMail'], $address['toName']);
 							}
 						}
 					}
