@@ -188,12 +188,11 @@ class Mailer {
 					$mail->AddAddress('support@rype3.com','Support - Rype3');
 				}
 				else {
-
 					foreach ($recipients['to'] as $recipient){
 						$toName = isset($recipient['toName']) ? $recipient['toName'] : '';
 
 						if (!isset($recipient['toMail'])) {
-							if (filter_var($recipient,FILTER_VALIDATE_EMAIL)) {
+							if (filter_var($recipient['toMail'],FILTER_VALIDATE_EMAIL)) {
 								$recipient['toMail'] = $recipient;	
 							}
 							else{
