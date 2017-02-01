@@ -188,26 +188,18 @@ class Mailer {
 					$mail->AddAddress('support@rype3.com','Support - Rype3');
 				}
 				else {
-					foreach ($recipients['to'] as $recipient){
-						$toName = isset($recipient['toName']) ? $recipient['toName'] : '';
-
-						if (isset($recipient['toMail'])) {
-							if (filter_var($recipient['toMail'],FILTER_VALIDATE_EMAIL)) {
-								$recipient['toMail'] = $recipient;	
+					foreach($recipients as $kind => $addresses) {
+						foreach($addresses as $address) {
+							if($kind === 'to') {
+								$mail->AddAddress($address['toEmail'], $address['toName']);
 							}
-							else{
-								throw new Exception("Error Processing Request");
+							elseif($kind === 'cc') {
+								$mail->AddCC($address['toEmail'], $address['toName']);
+							}
+							else {
+								$mail->AddBCC($address['toEmail'], $address['toName']);
 							}
 						}
-						$mail->AddAddress($recipient['toMail'],$toName);
-					}
-
-					foreach ($recipients['cc'] as $recipient){
-						$mail->AddCC($recipient['toEmail'],$recipient['toName']);
-					}
-
-					foreach ($recipients['bcc'] as $recipient){
-						$mail->AddBCC($recipient['toEmail'],$recipient['toName']);
 					}
 				}
 
