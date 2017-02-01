@@ -43,13 +43,13 @@ class Mailer {
 			}
 			
 			$mailData = array(
-					'from' => $fromMail,
-					'subj' => $subject,
-					'recp' => $recipients,
-					'body' => $body,
-					'tpsq' => $templatesequence,
-					'type' => $type,
-					'qts' => time()
+				'from' => $fromMail,
+				'subj' => $subject,
+				'recp' => $recipients,
+				'body' => $body,
+				'tpsq' => $templatesequence,
+				'type' => $type,
+				'qts' => time()
 			);
 			
 			$mail_queue_collection->insert($mailData);
@@ -113,16 +113,11 @@ class Mailer {
 	 */
 	private static function sendIt($mail){
 		$mailerState = self::sendMail(
-/*				array(
-						'to' => $mail['recp'],
-						'cc' => (isset($mail['cc']) ? $mail['cc'] : array()),
-						'bcc' => (isset($mail['bcc']) ? $mail['bcc'] : array())
-				),*/
-				$mail['recp'],
-				$mail['subj'],
-				$mail['body'],
-				$mail['type'] == self::MAIL_TYPE_HTML,
-				$mail['from']
+			$mail['recp'],
+			$mail['subj'],
+			$mail['body'],
+			$mail['type'] == self::MAIL_TYPE_HTML,
+			$mail['from']
 		);
 		
 		if(self::mailerCompleted($mail['_id'], $mailerState)) {
@@ -190,7 +185,7 @@ class Mailer {
 				}
 				//$mail->SetWordWrap();
 				if(SANDBOX_MODE) {
-					$mail->AddAddress('tech@sorewarding.com',$toName);
+					$mail->AddAddress('support@rype3.com','Support - Rype3');
 				}
 				else {
 
@@ -209,11 +204,11 @@ class Mailer {
 					}
 
 					foreach ($recipients['cc'] as $recipient){
-						$mail->AddCC($recipient['ccEmail'],$recipient['ccName']);
+						$mail->AddCC($recipient['toEmail'],$recipient['toName']);
 					}
 
 					foreach ($recipients['bcc'] as $recipient){
-						$mail->AddBCC($recipient['bccEmail'],$recipient['bccName']);
+						$mail->AddBCC($recipient['toEmail'],$recipient['toName']);
 					}
 				}
 
