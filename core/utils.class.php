@@ -609,18 +609,30 @@ class Utils {
 		$error = error_get_last();
 		if(($error['type'] == E_ERROR || $error['type'] == E_USER_ERROR) && app_live) {
 			try{
-				Mailer::submit(app_mail_from_email, array(
-						'to' => array('toName' => 'astroanu2004@gmail.com', 'toMail' => 'astroanu2004@gmail.com')
-				), 'We have a problem in '.app_name_visible, array(
+
+				Log::write(__METHOD__.' -> '.$error['message']);
+				Log::write(__METHOD__.' -> '.$error['file']);
+				Log::write(__METHOD__.' -> '.$error['line']);
+
+				$fromMail = array('fromEmail' => app_mail_from_email, 'fromName' => app_name_visible);
+				$recipients = array(
+					'to' => array(
+						array('toName' => 'Support team', 'toMail' => 'support@rype3.com')
+					)
+				);
+
+				Mailer::submit($fromMail, $recipients, 'We have a problem in '.app_name_visible, array(
 						'message' => $error['message'],
 						'file' => $error['file'],
 						'line' => $error['line'],
 						'url' => isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : null
 				), 'default/tpl/mail.shutdown.php', md5(implode('|', array($error['file'], $error['line'], $error['message']))));
+
+
 			}
 			catch(Exception $e){
-				Log::write($e->getMessage());
-				Log::write($e->getTraceAsString());
+				Log::write(__METHOD__.' '.$e->getMessage());
+				Log::write(__METHOD__.' '.$e->getTraceAsString());
 			}
 		}		
 	}

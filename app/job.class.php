@@ -12,16 +12,19 @@ class Job {
 	
 	public static function addJob($id, $function, $data){
 		$client = new \GearmanClient();
-		$client->addServer(gearman_server, gearman_port);
-			
-		$job = new Job();
-		 $job->setId($id)
-		->setExpireTime(time() + 172800)
-		->setReference(array('CLIController', $function, $data));
-			
-		$job_handle = $client->doBackground(app_name.'handle', serialize($job));
-		Log::write(__METHOD__.' invoked gearman job ('.$function.') for id ' . $id
-				.' '.app_name.'handle'.' '.$client->returnCode());
+		if ($client->addServer(gearman_server, gearman_port)) {
+            $job = new Job();
+            $job->setId($id)
+                ->setExpireTime(time() + 172800)
+                ->setReference(array('CLIController', $function, $data));
+
+            $job_handle = $client->doBackground(app_name.'handle', serialize($job));
+            Log::write(__METHOD__.' invoked gearman job ('.$function.') for id ' . $id
+                .' '.app_name.'handle'.' '.$client->returnCode());
+        }
+        else {
+            Log::write(__METHOD__.' Could not connect with gearman @'.gearman_server.':'.gearman_port);
+        }
 	}
 
 	public function getId() {

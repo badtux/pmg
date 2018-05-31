@@ -18,6 +18,7 @@ class Mailer {
 	 */
 	public static function submit($fromMail, $recipients, $subject, $body, $template = null, $templatesequence = null){
 		try{
+			if(!app_live) { $subject = 'TEST MAIL - '.$subject; }
 			$mail_queue_collection = Ds::connect(ds_mail_queue);
 			$type = self::MAIL_TYPE_TEXT;
 			
@@ -155,7 +156,6 @@ class Mailer {
 		else {
 			try{
 				$mail = new Phpmailer();
-				// $mail->IsSendmail();
 				$fromEmail = app_mail_from_email; 
 				$fromName = app_mail_from_name;
 				
@@ -163,10 +163,45 @@ class Mailer {
 					if(isset($from['fromEmail'])) {  $fromEmail = $from['fromEmail']; } 
 					if(isset($from['fromName'])) { $fromName = $from['fromName']; }
 				}
-				
-				$mail->Subject = $subject;
+
+				Log::write(__METHOD__ . ' before');
+
+				$mail->SMTPDebug = 3;
+
+				if(defined('app_mail_host')){
+					Log::write('defined');
+				}
+				else {
+					Log::write('not defined');
+				}
+
+				if(defined('app_mail_host') && defined('app_mail_port') && defined('app_mail_username') && defined('app_mail_password')){
+                    Log::write(__METHOD__.' in SMTP with '.app_mail_host.':'.app_mail_port.' via '.app_mail_username);
+                    $mail->isSMTP();
+					$mail->Host = 'tls://'.app_mail_host.':'.app_mail_port;
+                    //$mail->Hostname = app_mail_host;
+                    //$mail->Port = app_mail_port;
+                    //$mail->SMTPSecure = 'tls';
+                    $mail->SMTPAuth = true;
+                    $mail->Username = app_mail_username;
+                    $mail->Password = app_mail_password;
+
+					$mail->SMTPOptions = array(
+						'ssl' => array(
+							'verify_peer' => false,
+							'verify_peer_name' => false,
+							'allow_self_signed' => true
+						)
+					);
+                }
+                else {
+                    Log::write(__METHOD__.' in Sendmail');
+                    $mail->IsSendmail();
+                }
+
+                $mail->Subject = $subject;
 				$mail->Encoding = 'base64'; //'quoted-printable';
-				$mail->Hostname = app_mail_host;
+
 				$mail->Sender = $fromEmail;
 				$mail->set('Return-Path', $fromName);
 				$mail->AddReplyTo($fromEmail,$fromName);
@@ -185,9 +220,11 @@ class Mailer {
 				}
 				//$mail->SetWordWrap();
 				if(SANDBOX_MODE) {
-					$mail->AddAddress('support@rype3.com','Support - Rype3');
+                    Log::write(__METHOD__.' in Sandbox mode');
+					$mail->AddAddress('viraj.abayarathna@gmail.com','Support - Rype3');
 				}
 				else {
+                    Log::write(__METHOD__.' in Production mode');
 					foreach($recipients as $kind => $addresses) {
 						foreach($addresses as $address) {
 							if($kind === 'to') {
