@@ -27,6 +27,8 @@
 			'Analytic' => app_class_path . DIRECTORY_SEPARATOR . 'analytic.class.php',
 			'Statistics' => app_class_path . DIRECTORY_SEPARATOR . 'statistics.class.php',
 
+			'HTMLToPDF' => app_class_path . DIRECTORY_SEPARATOR . 'htmltopdf.class.php',
+
 			//'Object'=>app_class_path . DIRECTORY_SEPARATOR . 'object.class.php',
 			/*
 			 * lib classes
@@ -39,18 +41,12 @@
 			//'Lib_Anet_Response'=> app_lib_path . DIRECTORY_SEPARATOR . 'anet.class.php',
 			//'Lib_Anet'=> app_lib_path . DIRECTORY_SEPARATOR . 'anet.class.php',
 			'Lib_Cur'=> app_lib_path . DIRECTORY_SEPARATOR . 'cur.class.php',
-			'Lib_Mail'=> app_lib_path . DIRECTORY_SEPARATOR . 'mail.class.php',
+			//'Lib_Mail'=> app_lib_path . DIRECTORY_SEPARATOR . 'mail.class.php',
+			//'Lib_Mail'=> app_lib_path . DIRECTORY_SEPARATOR . 'mail.class.php',
 		);
 
 		if(array_key_exists($className, $knownClasses)) {
             require_once $knownClasses[$className];
-		}
-
-		else if(preg_match('/Google_/', $className)){
-			require_once app_3rdparty_path . 'facebook/'.$className.'.php';
-		}
-		else if(preg_match('/ApnsPHP/', $className)){
-			require_once app_3rdparty_path. 'ApnsPHP/Autoload.php';
 		}
 		else {
 			$classPath = null;
