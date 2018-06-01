@@ -16,7 +16,7 @@ class Utils {
 	public static function is_timestamp($ts){
 		return $ts < PHP_INT_MAX && $ts > ~PHP_INT_MAX && strtotime(date('D F Y',(int)$ts));
 	}
-	
+
 	public static function ordinal($val){
 		$ends = array('th','st','nd','rd','th','th','th','th','th','th');
 		if (($val % 100) >= 11 && ($val % 100) <= 13) {

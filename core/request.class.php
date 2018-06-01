@@ -103,7 +103,12 @@ class Request {
 		//Log::write(__METHOD__);
 		$this->G = (object)array_map(array($this,'_clean'),$_GET);
 
-        $this->route = $this->G->route; unset($this->G->route);
+        if(isset($this->G->route)) {
+            $this->route = $this->G->route;
+            unset($this->G->route);
+        }
+
+        echo $this->route;
 		$this->P = (object)array_map(array($this,'_clean'),$_POST);
 		$this->C = (object)array_map(array($this,'_clean'),$_COOKIE);
 
