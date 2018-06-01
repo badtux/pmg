@@ -108,7 +108,6 @@ class Request {
             unset($this->G->route);
         }
 
-        echo $this->route;
 		$this->P = (object)array_map(array($this,'_clean'),$_POST);
 		$this->C = (object)array_map(array($this,'_clean'),$_COOKIE);
 
