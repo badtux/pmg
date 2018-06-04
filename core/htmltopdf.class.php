@@ -26,6 +26,9 @@ class HTMLToPDF
         if(defined('app_bin_path') && file_exists(app_bin_path.$this->convertorBinary)) {
             $this->cmd = app_bin_path . $this->convertorBinary;
         }
+
+        // disable smart shrinking
+        $this->cmd = $this->cmd .' --disable-smart-shrinking --dpi 96';
     }
 
     public function getPDF($fileName){
