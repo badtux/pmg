@@ -16,7 +16,7 @@ class Mailer {
 	 * @param array or string $body
 	 * @param string $templatesequence
 	 */
-	public static function submit($fromMail, $recipients, $subject, $body, $template = null, $templatesequence = null){
+	public static function submit($fromMail, $recipients, $subject, $body, $template = null, $templateSequence = null, $attachments=[]){
 		try{
 			if(!app_live) { $subject = 'TEST MAIL - '.$subject; }
 			$mail_queue_collection = Ds::connect(ds_mail_queue);
@@ -26,13 +26,13 @@ class Mailer {
 				throw New Exception('recipients must be an array');
 			}
 			
-			if(is_null($templatesequence)){
-				$templatesequence = md5(serialize($recipients).'|'.$subject.'|'.time());
+			if(is_null($templateSequence)){
+				$templateSequence = md5(serialize($recipients).'|'.$subject.'|'.time());
 			}
 			
-			$tpls = $mail_queue_collection->findOne(array('tpsq' => $templatesequence));
+			$tpls = $mail_queue_collection->findOne(array('tpsq' => $templateSequence));
 			if(!is_null($tpls)){
-				throw New Exception('email already queued with this tpl seq - '.$templatesequence);
+				throw New Exception('email already queued with this tpl seq - '.$templateSequence);
 			}
 			
 			if(is_array($body)){
@@ -48,8 +48,9 @@ class Mailer {
 				'subj' => $subject,
 				'recp' => $recipients,
 				'body' => $body,
-				'tpsq' => $templatesequence,
+				'tpsq' => $templateSequence,
 				'type' => $type,
+				'atch' => $attachments,
 				'qts' => time()
 			);
 			
@@ -78,7 +79,12 @@ class Mailer {
 	
 	public static function processGearmanJob($id){
 		$mail_queue_collection = Ds::connect(ds_mail_queue);
-		$mail = $mail_queue_collection->findOne(array('_id' => new \MongoId($id),'cts' => array('$exists' => false), 'err' => array('$exists' => false)));
+		$mail = $mail_queue_collection->findOne([
+			'_id' => new \MongoId($id),
+			'cts' => ['$exists' => false],
+			'err' => ['$exists' => false]
+		]);
+
 		if(is_null($mail)){
 			Log::write(__METHOD__.' job '.$id.' is either already done or could not be found');
 		}
@@ -118,7 +124,8 @@ class Mailer {
 			$mail['subj'],
 			$mail['body'],
 			$mail['type'] == self::MAIL_TYPE_HTML,
-			$mail['from']
+			$mail['from'],
+			$mail['atch']
 		);
 		
 		if(self::mailerCompleted($mail['_id'], $mailerState)) {
@@ -148,7 +155,7 @@ class Mailer {
 	 * @param boolean $isHtml
 	 * @param boolean $from
 	 */
-	private static function sendMail($recipients, $subject, $mailBody, $isHtml, $from = false) {
+	private static function sendMail($recipients, $subject, $mailBody, $isHtml, $from = false, $attach=[]) {
 		if(!(bool)strlen($mailBody)) {
 			$msg = 'Empty mail body found. Sending defered';
 			return false;
@@ -206,6 +213,10 @@ class Mailer {
 				$mail->set('Return-Path', $fromName);
 				$mail->AddReplyTo($fromEmail,$fromName);
 				$mail->SetFrom($fromEmail, $fromName);
+
+				foreach ($attach as $attachment){
+					$mail->addAttachment($attachment);
+				}
 
 				if((bool)$isHtml) {
 					$mail->MsgHTML((string)$mailBody);
