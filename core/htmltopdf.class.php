@@ -34,7 +34,8 @@ class HTMLToPDF
 
         $out = exec($this->cmd.' '.$this->contentPath.' '.$filename, $this->execOut, $this->execReturnOut);
 
-        return $out;
+        return $filename;
+        //return $out;
     }
 
     private function writeToFile($fileNamePathOrFalseForTemp, $content, $fileType=false){
