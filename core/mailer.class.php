@@ -42,7 +42,7 @@ class Mailer {
 				$type = self::MAIL_TYPE_HTML;
 				$body = Utils::parseMe($template, $body);
 			}
-			
+
 			$mailData = array(
 				'from' => $fromMail,
 				'subj' => $subject,
@@ -147,6 +147,9 @@ class Mailer {
 		return true;
 	}
 
+	public static function sendMailNow($recipients, $subject, $mailBody, $isHtml, $from = false, $attachments=[]) {
+		self::sendMail($recipients, $subject, $mailBody, $isHtml, $from, $attachments);
+    }
 	/**
 	 * 
 	 * @param array $recipients
@@ -215,6 +218,8 @@ class Mailer {
 				$mail->SetFrom($fromEmail, $fromName);
 
 				foreach ($attachments as $attachment){
+                    Log::write(__METHOD__.' '.$attachment);
+
 					$mail->addAttachment($attachment);
 				}
 
