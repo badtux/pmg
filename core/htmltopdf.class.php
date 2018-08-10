@@ -38,7 +38,7 @@ class HTMLToPDF
         $out = exec($this->cmd.' '.$this->contentPath.' '.$filename.' 2>&1', $this->execOut, $this->execReturnOut);
 
         if($this->execReturnOut != 0){
-            throw new \Exception($this->execOut[0], $this->execReturnOut);
+           // throw new \Exception($this->execOut[0], $this->execReturnOut);
         }
 
         return $filename;
