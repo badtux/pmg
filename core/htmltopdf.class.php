@@ -35,10 +35,13 @@ class HTMLToPDF
         $filename = app_upload_path.ltrim($fileName, '/');
         $this->prepareTargetFilePath($filename);
 
-        $out = exec($this->cmd.' '.$this->contentPath.' '.$filename, $this->execOut, $this->execReturnOut);
+        $out = exec($this->cmd.' '.$this->contentPath.' '.$filename.' 2>&1', $this->execOut, $this->execReturnOut);
+
+        if($this->execReturnOut != 0){
+            throw new \Exception($this->execOut[0], $this->execReturnOut);
+        }
 
         return $filename;
-        //return $out;
     }
 
     private function writeToFile($fileNamePathOrFalseForTemp, $content, $fileType=false){

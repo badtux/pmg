@@ -155,7 +155,7 @@ class Mailer {
 	 * @param boolean $isHtml
 	 * @param boolean $from
 	 */
-	private static function sendMail($recipients, $subject, $mailBody, $isHtml, $from = false, $attach=[]) {
+	private static function sendMail($recipients, $subject, $mailBody, $isHtml, $from = false, $attachments=[]) {
 		if(!(bool)strlen($mailBody)) {
 			$msg = 'Empty mail body found. Sending defered';
 			return false;
@@ -214,7 +214,7 @@ class Mailer {
 				$mail->AddReplyTo($fromEmail,$fromName);
 				$mail->SetFrom($fromEmail, $fromName);
 
-				foreach ($attach as $attachment){
+				foreach ($attachments as $attachment){
 					$mail->addAttachment($attachment);
 				}
 
