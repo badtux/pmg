@@ -2,13 +2,14 @@
 	//ini_set('session.save_handler', 'memcache');
 	//ini_set('session.save_path',  'tcp://'.cache_memcache_server .':'. cache_memcache_port.'?persistent=1&amp;weight=1&amp;timeout=1&amp;retry_interval=15');
 	session_set_save_handler(
-						array('Core\Session','open'),
-						array('Core\Session','close'),
-						array('Core\Session','read'),
-						array('Core\Session','write'),
-						array('Core\Session','destroy'),
-						array('Core\Session','gc')
-						);
+		['Core\Session','open'],
+		['Core\Session','close'],
+		['Core\Session','read'],
+		['Core\Session','write'],
+		['Core\Session','destroy'],
+		['Core\Session','gc']
+	);
+	
 	//get the token
 	$token = isset($_REQUEST['token']) ? $_REQUEST['token'] : null;
 	if(!is_null($token)) {

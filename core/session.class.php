@@ -86,6 +86,7 @@ class Session {
 		else {
 			self::$_key = base64_decode($_COOKIE[self::$_keyName]);
 		}
+
 		return true;
 	}
 
@@ -116,6 +117,7 @@ class Session {
 	 */
 	public static function close() {
 		self::$_db->close();
+		return true;
 	}
 
 	/**
@@ -143,7 +145,8 @@ class Session {
 			else {
 				self::$_db->set($sess_id, $iv . $encrypted);
 			}
-			return;
+
+			return true;
 		}
 	}
 
