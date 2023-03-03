@@ -1,6 +1,6 @@
 <?php
 namespace Core;
-class Session {
+class Session implements \SessionHandlerInterface {
 
 	/**
 	 *
@@ -107,6 +107,7 @@ class Session {
 		$encrypted = substr($data, self::$_ivSize);
 		$decrypt = mcrypt_decrypt(self::CIPHER, self::$_key, $encrypted,self::CIPHER_MODE, $iv);
 		$d = rtrim($decrypt, "�");
+
 		return $d;
 	}
 
@@ -116,8 +117,7 @@ class Session {
 	 * trigger on the session_write_close
 	 */
 	public static function close() {
-		self::$_db->close();
-		return true;
+		return self::$_db->close();
 	}
 
 	/**
@@ -148,6 +148,8 @@ class Session {
 
 			return true;
 		}
+
+		return false;
 	}
 
 	/**
