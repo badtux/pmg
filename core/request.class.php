@@ -1,6 +1,7 @@
 <?php
 namespace Core;
 use Core\Analytic;
+use GeoIp2\Database\Reader;
 
 class Request {
 	private $userAgent  = null;
@@ -88,9 +89,25 @@ class Request {
 
 		if($thisIp != $this->remoteAddr) {
 			$this->remoteAddr = $thisIp;
+
 			//Log::write(__METHOD__ . ' ' . $this->remoteAddr);
-			if(!function_exists('geoip_record_by_name')) { throw new Exception('method `geoip_record_by_name` does not exists'); }
-			if(($geoData = @geoip_record_by_name($this->remoteAddr)) !== false) {
+			if(!function_exists('geoip_record_by_name')) { 
+				//throw new Exception('method `geoip_record_by_name` does not exists'); 
+				try {
+					$reader = new Reader(__DIR__.'/../3rdparty/geoip/GeoLite2-City.mmdb');
+					$record = $reader->city($this->remoteAddr)->name;
+
+					if($record instanceof GeoIp2\Model\City){
+
+					}
+				}
+				catch (Exception $e){
+					print_r($e);
+					exit;
+					//Log::write(__METHOD__ . ' ' . $this->remoteAddr. ' '. $e->getMessage());
+				}
+			}
+			else if(($geoData = @geoip_record_by_name($this->remoteAddr)) !== false) {
 				$geoData['city_code']=strtolower($geoData['country_code'].'-'.$geoData['region'].'-'.preg_replace('([\s-])','_', $geoData['city']));
 				$this->geo = $geoData;
 			}
@@ -99,7 +116,7 @@ class Request {
 
 	private function process() {
 		//$this->purifier = new HTMLPurifier();
-		$this->geoFix();
+		//$this->geoFix();
 		//Log::write(__METHOD__);
 		$this->G = (object)array_map(array($this,'_clean'),$_GET);
 
