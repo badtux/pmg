@@ -67,7 +67,7 @@ class Session implements \SessionHandlerInterface {
 	public function open($save_path, $session_name):bool {
 		$this->_db = $this->getMemcache();
 		$this->_ivSize = mcrypt_get_iv_size(Session::CIPHER, Session::CIPHER_MODE);
-		self::$_keyName = 'y'.$session_name;
+		$this->_keyName = 'y'.$session_name;
 
 		if (empty($_COOKIE[$this->_keyName])) {
 			$keyLength = mcrypt_get_key_size(Session::CIPHER, Session::CIPHER_MODE);
