@@ -97,8 +97,8 @@ class Session implements \SessionHandlerInterface {
 	 */
 	public function read($id) {
 		$sess_id = 'sess_' . $id;
-		self::_setExpire($sess_id);
-		$data = self::$_db->get($sess_id);
+		$this->_setExpire($sess_id);
+		$data = $this->_db->get($sess_id);
 
 		if (empty($data)) {
 			return false;
