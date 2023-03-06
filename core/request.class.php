@@ -89,10 +89,12 @@ class Request {
 		if($thisIp != $this->remoteAddr) {
 			$this->remoteAddr = $thisIp;
 			//Log::write(__METHOD__ . ' ' . $this->remoteAddr);
-			if(!function_exists('geoip_record_by_name')) { throw new Exception('method `geoip_record_by_name` does not exists'); }
-			if(($geoData = @geoip_record_by_name($this->remoteAddr)) !== false) {
-				$geoData['city_code']=strtolower($geoData['country_code'].'-'.$geoData['region'].'-'.preg_replace('([\s-])','_', $geoData['city']));
-				$this->geo = $geoData;
+			if(function_exists('geoip_record_by_name')) { 
+				// was throw new Exception('method `geoip_record_by_name` does not exists');
+				if(($geoData = @geoip_record_by_name($this->remoteAddr)) !== false) {
+					$geoData['city_code']=strtolower($geoData['country_code'].'-'.$geoData['region'].'-'.preg_replace('([\s-])','_', $geoData['city']));
+					$this->geo = $geoData;
+				}
 			}
 		}
 	}
