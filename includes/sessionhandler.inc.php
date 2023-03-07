@@ -11,32 +11,36 @@
 	// );
 
 	// Set session save handler
-	session_set_save_handler(
-		// Session open callback
-		function ($save_path, $session_name) {
-			return Core\Session::open($save_path, $session_name);
-		},
-		// Session close callback
-		function () {
-			return Core\Session::close();
-		},
-		// Session read callback
-		function ($session_id) {
-			return Core\Session::read($session_id);
-		},
-		// Session write callback
-		function ($session_id, $session_data) {
-			return Core\Session::write($session_id, $session_data);
-		},
-		// Session destroy callback
-		function ($session_id) {
-			return Core\Session::destroy($session_id);
-		},
-		// Session garbage collection callback
-		function ($maxlifetime) {
-			return Core\Session::gc($maxlifetime);
-		}
-	);
+	// session_set_save_handler(
+	// 	// Session open callback
+	// 	function ($save_path, $session_name) {
+	// 		return Core\Session::open($save_path, $session_name);
+	// 	},
+	// 	// Session close callback
+	// 	function () {
+	// 		Core\Session::close();
+	// 		return true;
+	// 	},
+	// 	// Session read callback
+	// 	function ($session_id) {
+	// 		return Core\Session::read($session_id);
+	// 	},
+	// 	// Session write callback
+	// 	function ($session_id, $session_data) {
+	// 		Core\Session::write($session_id, $session_data);
+	// 		return true;
+	// 	},
+	// 	// Session destroy callback
+	// 	function ($session_id) {
+	// 		Core\Session::destroy($session_id);
+	// 		return true;
+	// 	},
+	// 	// Session garbage collection callback
+	// 	function ($maxlifetime) {
+	// 		Core\Session::gc($maxlifetime);
+	// 		return true;
+	// 	}
+	// );
 
 	//get the token
 	$token = isset($_REQUEST['token']) ? $_REQUEST['token'] : null;
@@ -59,9 +63,11 @@
 		$cachedId = session_id();
 		session_regenerate_id(true);
 		try {
-			$ds->update(array('snid' => $cachedId),array('$set' => array('snid' => session_id())));
+			//$ds->update(array('snid' => $cachedId),array('$set' => array('snid' => session_id())));
+			$ds->replaceOne(['snid' => $cachedId], ['snid' => session_id()]);
 		}
 		catch (Exception $e) {
+			echo $e->getMessage();
 			Log::write('Exception: '.$e->getCode().' '.$e->getMessage());
 		}
 		$_SESSION['session.created'] = time();

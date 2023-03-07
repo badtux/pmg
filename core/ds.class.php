@@ -30,22 +30,34 @@ class Ds {
 					@list($database, $collection) = explode('/', trim($dsConfig->path, '/'));
 
 					try {
-						if(app_mongo_replset) {
-							$mongo = new \MongoClient(app_mongo_replset);
-						}
-						else if(app_mongo_no_auth) {
-							$mongo = new \MongoClient('mongodb://'. $dsConfig->host,array('db'=>$database,'connect'=>true,'connectTimeoutMS' => 2000));
+						if(app_mongo_no_auth) {
+							// Log::write('-----> DB CONN');
+
+							if(phpversion() <= 5.6){
+								$mongo = new \MongoClient('mongodb://'. $dsConfig->host,array('db'=>$database,'connect'=>true,'connectTimeoutMS' => 2000));
+							}else if(phpversion() >= 8.1){
+								$client = new \MongoDB\Client('mongodb://'. $dsConfig->host, [
+									'db' => $database, 'connect' => true, 'connectTimeoutMS' => 2000
+								], [
+									'typeMap' => ['root' => 'array', 'document' => 'array', 'array' => 'array']
+								]);
+							}
+							else {
+								throw new Exception('Unsupported Parser version '.phpversion());
+							}
 						}
 						else {
-							$mongo = new \MongoClient('mongodb://'. $dsConfig->user .':' .$dsConfig->pass. '@' . $dsConfig->host,array('db'=>$database,'connect'=>true,'connectTimeoutMS' => 2000));
+							throw new Exception('Unsupported DB mode');
 						}
 
 						if(!is_null($database) && !is_null($collection)) {
-							self::$stores[$dsIdentifier] = $mongo->{$database}->{$collection};
+							//self::$stores[$dsIdentifier] = $mongo->{$database}->{$collection};
+							self::$stores[$dsIdentifier] = $client->{$database}->{$collection};
 						}
 						else {
 							if(!is_null($database)) {
-								self::$stores[$dsIdentifier] = $mongo->{$database};
+								//self::$stores[$dsIdentifier] = $mongo->{$database};
+								self::$stores[$dsIdentifier] = $client->{$database};
 							}
 							else {
 								throw new Exception('Missing Database or Collection');

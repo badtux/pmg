@@ -1,5 +1,8 @@
+composer.lock
 .DS_Store
 .settings
 .buildpath
 .project
 /3rdparty/phpqrcode/cache/
+
+/vendor/

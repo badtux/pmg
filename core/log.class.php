@@ -39,7 +39,7 @@ class Log {
 		$loggable = $request->getLoggableRequest();
 
 		if(!is_null($loggable)) {
-				$ds->insert($loggable);
+			$ds->insertOne($loggable);
 		}
     }
 }

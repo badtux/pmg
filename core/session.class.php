@@ -86,6 +86,7 @@ class Session {
 		else {
 			self::$_key = base64_decode($_COOKIE[self::$_keyName]);
 		}
+
 		return true;
 	}
 
@@ -97,15 +98,18 @@ class Session {
 	public static function read($id) {
 		$sess_id = 'sess_' . $id;
 		self::_setExpire($sess_id);
+
 		$data = self::$_db->get($sess_id);
 
 		if (empty($data)) {
 			return false;
 		}
+
 		$iv = substr($data, 0, self::$_ivSize);
 		$encrypted = substr($data, self::$_ivSize);
 		$decrypt = mcrypt_decrypt(self::CIPHER, self::$_key, $encrypted,self::CIPHER_MODE, $iv);
 		$d = rtrim($decrypt, "�");
+
 		return $d;
 	}
 
@@ -116,6 +120,7 @@ class Session {
 	 */
 	public static function close() {
 		self::$_db->close();
+		return true;
 	}
 
 	/**

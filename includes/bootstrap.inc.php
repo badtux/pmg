@@ -40,9 +40,10 @@
 			'Lib_Image' => app_lib_path . DIRECTORY_SEPARATOR . 'image.class.php',
 			//'Lib_Anet_Response'=> app_lib_path . DIRECTORY_SEPARATOR . 'anet.class.php',
 			//'Lib_Anet'=> app_lib_path . DIRECTORY_SEPARATOR . 'anet.class.php',
-			'Lib_Cur'=> app_lib_path . DIRECTORY_SEPARATOR . 'cur.class.php',
+			'Lib_Cur' => app_lib_path . DIRECTORY_SEPARATOR . 'cur.class.php',
 			//'Lib_Mail'=> app_lib_path . DIRECTORY_SEPARATOR . 'mail.class.php',
 			//'Lib_Mail'=> app_lib_path . DIRECTORY_SEPARATOR . 'mail.class.php',
+			'MongoDB\Client' => app_vendor_path . DIRECTORY_SEPARATOR . 'autoload.php',
 		);
 
 		if(array_key_exists($className, $knownClasses)) {
