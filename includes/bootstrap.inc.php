@@ -3,7 +3,8 @@
 		array(pmg_root.'pg'),
 		explode(PATH_SEPARATOR, get_include_path())
 	)))); */
-
+	require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'vendor'. DIRECTORY_SEPARATOR . 'autoload.php';
+	
 	spl_autoload_register(function ($className) {
 		$knownClasses = array(
 			/*
@@ -43,7 +44,7 @@
 			'Lib_Cur' => app_lib_path . DIRECTORY_SEPARATOR . 'cur.class.php',
 			//'Lib_Mail'=> app_lib_path . DIRECTORY_SEPARATOR . 'mail.class.php',
 			//'Lib_Mail'=> app_lib_path . DIRECTORY_SEPARATOR . 'mail.class.php',
-			'MongoDB\Client' => app_vendor_path . DIRECTORY_SEPARATOR . 'autoload.php',
+			//'MongoDB\Client' => app_vendor_path . DIRECTORY_SEPARATOR . 'autoload.php',
 		);
 
 		if(array_key_exists($className, $knownClasses)) {
@@ -70,8 +71,9 @@
 				require_once $classPath;
 			}
 			else {
-				throw new Exception('class ' . $className . ' not found');
-				exit();
+				require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'vendor'. DIRECTORY_SEPARATOR . 'autoload.php';
+				//throw new Exception('class ' . $className . ' not found');
+				//exit();
 			}
 		}
 	});
