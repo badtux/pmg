@@ -44,7 +44,7 @@
 			'Lib_Cur' => app_lib_path . DIRECTORY_SEPARATOR . 'cur.class.php',
 			//'Lib_Mail'=> app_lib_path . DIRECTORY_SEPARATOR . 'mail.class.php',
 			//'Lib_Mail'=> app_lib_path . DIRECTORY_SEPARATOR . 'mail.class.php',
-			//'MongoDB\Client' => app_vendor_path . DIRECTORY_SEPARATOR . 'autoload.php',
+			'MongoDB\Client' => app_vendor_path . DIRECTORY_SEPARATOR . 'autoload.php',
 		);
 
 		if(array_key_exists($className, $knownClasses)) {
