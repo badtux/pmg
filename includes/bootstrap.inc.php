@@ -72,8 +72,8 @@
 			}
 			else {
 				//require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'vendor'. DIRECTORY_SEPARATOR . 'autoload.php';
-				throw new Exception('class ' . $className . ' not found');
-				exit();
+				//throw new Exception('class ' . $className . ' not found');
+				//exit();
 			}
 		}
 	});
