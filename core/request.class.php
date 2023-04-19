@@ -210,7 +210,6 @@ class Request {
         if($property == '__pb') { $passBack = $this->passBack; $this->passBack = null; return $passBack; }
 		if($property == '__passback') { $passBack = $this->userPassBack; $this->userPassBack = null; return $passBack; }
         if($property == '__referer' && ($this->httpReferer != '' || !is_null($this->httpReferer))) {
-			var_dump($this->httpReferer);
         	if(app_domain == substr(parse_url($this->httpReferer, PHP_URL_HOST),-strlen(app_domain))) {
 				return (string)(parse_url($this->httpReferer,PHP_URL_PATH));
         	}
