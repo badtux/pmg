@@ -231,14 +231,14 @@ class Request {
 		}
 		else {
 			$data = $this->_sanitize ? $this->_sanitizer->clean($data) : $data;
-			return (mb_check_encoding($data, 'UTF-8')) ? $data : $this->filter(utf8_encode($data));
+			return (@mb_check_encoding($data, 'UTF-8')) ? $data : $this->filter(utf8_encode($data));
 		}
 
 	}
 
 	private function _sanitize($data) {
 		$data = self::$_sanitizable ? $this->_sanitizer->clean($data) : $data;
-		return (mb_check_encoding($data, 'UTF-8')) ? $data : $this->_sanitize(utf8_encode($data));
+		return (@mb_check_encoding($data, 'UTF-8')) ? $data : $this->_sanitize(utf8_encode($data));
 	}
 
 	private function _clean($data) {
