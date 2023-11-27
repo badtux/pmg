@@ -364,9 +364,7 @@ class Utils {
 	public static function shutDown() {		
 		$error = error_get_last();
 
-		Log::write(serialize($error));
-
-		if(isset($error['type']) && ($error['type'] == E_ERROR || $error['type'] == E_USER_ERROR) && app_live) {
+		if(!is_null($error) && ($error['type'] == E_ERROR || $error['type'] == E_USER_ERROR) && app_live) {
 			try{
 
 				Log::write(__METHOD__.' -> '.$error['message']);
