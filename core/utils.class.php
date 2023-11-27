@@ -364,9 +364,8 @@ class Utils {
 	public static function shutDown() {		
 		$error = error_get_last();
 
-		if(!is_null($error) && ($error['type'] == E_ERROR || $error['type'] == E_USER_ERROR) && app_live) {
-			try{
-
+		if(is_array($error) && in_array($error['type'], [E_ERROR, E_USER_ERROR]) && app_live) {
+			try {
 				Log::write(__METHOD__.' -> '.$error['message']);
 				Log::write(__METHOD__.' -> '.$error['file']);
 				Log::write(__METHOD__.' -> '.$error['line']);
@@ -384,7 +383,6 @@ class Utils {
 						'line' => $error['line'],
 						'url' => isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : null
 				), 'default/tpl/mail.shutdown.php', md5(implode('|', array($error['file'], $error['line'], $error['message']))));
-
 
 			}
 			catch(Exception $e){
