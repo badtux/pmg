@@ -4,6 +4,10 @@
 		explode(PATH_SEPARATOR, get_include_path())
 	)))); */
 	require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'vendor'. DIRECTORY_SEPARATOR . 'autoload.php';
+
+	ini_set('session.cookie_httponly', 1);
+	ini_set('session.use_only_cookies', 1);
+	ini_set('session.cookie_secure', 1);
 	
 	spl_autoload_register(function ($className) {
 		$knownClasses = array(
@@ -36,8 +40,8 @@
 			 *
 			 * */
 			'Lib_Validate' => app_lib_path . DIRECTORY_SEPARATOR . 'validate.class.php',
-			'Lib_Mysql' => app_lib_path . DIRECTORY_SEPARATOR . 'mysql.class.php',
-			'Lib_MysqlResult' => app_lib_path . DIRECTORY_SEPARATOR . 'mysqlresult.class.php',
+			//'Lib_Mysql' => app_lib_path . DIRECTORY_SEPARATOR . 'mysql.class.php',
+			//'Lib_MysqlResult' => app_lib_path . DIRECTORY_SEPARATOR . 'mysqlresult.class.php',
 			'Lib_Image' => app_lib_path . DIRECTORY_SEPARATOR . 'image.class.php',
 			//'Lib_Anet_Response'=> app_lib_path . DIRECTORY_SEPARATOR . 'anet.class.php',
 			//'Lib_Anet'=> app_lib_path . DIRECTORY_SEPARATOR . 'anet.class.php',
