@@ -79,8 +79,8 @@ class Session {
 			         $cookie_param['lifetime'],
 			         $cookie_param['path'],
 			         $cookie_param['domain'],
-			         $cookie_param['secure'],
-			         $cookie_param['httponly']
+			         true, //$cookie_param['secure'],
+			         true//$cookie_param['httponly']
 			    );
 		}
 		else {

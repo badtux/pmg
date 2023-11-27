@@ -5,15 +5,6 @@
 	)))); */
 	require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'vendor'. DIRECTORY_SEPARATOR . 'autoload.php';
 
-	ini_set('session.cookie_httponly', 1);
-	ini_set('session.use_only_cookies', 1);
-	ini_set('session.cookie_secure', 1);
-	header('Header: always edit Set-Cookie (.*) "$1; HTTPOnly"');
-	header('X-XSS-Protection: 1; mode=block');
-	header('X-Content-Type-Options: nosniff');
-	header('X-Frame-Options: SAMEORIGIN');
-	header('Strict-Transport-Security: max-age=31536000; includeSubDomains; preload');
-
 	spl_autoload_register(function ($className) {
 		$knownClasses = array(
 			/*
