@@ -185,30 +185,6 @@ class Mailer {
 					Log::write('not defined');
 				}
 
-				if(defined('app_mail_host') && defined('app_mail_port') && defined('app_mail_username') && defined('app_mail_password')){
-                    Log::write(__METHOD__.' in SMTP with '.app_mail_host.':'.app_mail_port.' via '.app_mail_username);
-                    $mail->isSMTP();
-					$mail->Host = 'tls://'.app_mail_host.':'.app_mail_port;
-                    //$mail->Hostname = app_mail_host;
-                    //$mail->Port = app_mail_port;
-                    //$mail->SMTPSecure = 'tls';
-                    $mail->SMTPAuth = true;
-                    $mail->Username = app_mail_username;
-                    $mail->Password = app_mail_password;
-
-					$mail->SMTPOptions = array(
-						'ssl' => array(
-							'verify_peer' => false,
-							'verify_peer_name' => false,
-							'allow_self_signed' => true
-						)
-					);
-                }
-                else {
-                    Log::write(__METHOD__.' in Sendmail');
-                    $mail->IsSendmail();
-                }
-
                 $mail->Subject = $subject;
 				$mail->Encoding = 'base64'; //'quoted-printable';
 
@@ -234,13 +210,36 @@ class Mailer {
 				else {
 					$mail->Body = (string)$mailBody;
 				}
+
 				//$mail->SetWordWrap();
+				$usesAWSSES = $usesAppMail = 0;
+				$awsSESAllowList = [
+					'tech@ceynet.asia','milindum@gmail.com','info@malkey.lk','mail@malkey.lk','accounts@malkey.lk','viraj.abayarathna@gmail.com'
+				];
+
+				$viaAWS = $viaAppMail = ['to'=>[],'cc'=>[],'bcc'=>[]];
+				foreach($recipients as $kind => $addresses) {
+					foreach($addresses as $address) {
+						if(in_array($address['toMail'], $awsSESAllowList) && !in_array($address['toMail'], $viaAWS[$kind])) {
+							$usesAWSSES++;
+							array_push($viaAWS[$kind], $address);
+						}
+						else {
+							$usesAppMail++;
+							array_push($viaAppMail[$kind], $address);
+						}
+					}
+				}
+
+				Log::write(__METHOD__.' via AppMail: '.$usesAppMail.' via AWSSES: '.$usesAWSSES);
+
 				if(SANDBOX_MODE) {
                     Log::write(__METHOD__.' in Sandbox mode');
 					$mail->AddAddress('viraj.abayarathna@gmail.com','Support - Rype3');
 				}
 				else {
                     Log::write(__METHOD__.' in Production mode');
+					if((bool)$usesAWSSES) { $recipients = $viaAWS; } else { $recipients = $viaAppMail; }
 					foreach($recipients as $kind => $addresses) {
 						foreach($addresses as $address) {
 							if($kind === 'to') {
@@ -255,6 +254,49 @@ class Mailer {
 						}
 					}
 				}
+
+				if(((bool)$useAWSSES) && defined('app_mail_awsses_host') && defined('app_mail_awsses_port') && defined('app_mail_awsses_username') && defined('app_mail_awsses_password')){
+					Log::write(__METHOD__.' in SMTP with '.app_mail_awsses_host.':'.app_mail_awsses_port.' via '.app_mail_awsses_username);
+                    $mail->isSMTP();
+					$mail->Host = 'tls://'.app_mail_awsses_host.':'.app_mail_awsses_port;
+                    //$mail->Hostname = app_mail_host;
+                    //$mail->Port = app_mail_port;
+                    //$mail->SMTPSecure = 'tls';
+                    $mail->SMTPAuth = true;
+                    $mail->Username = app_mail_awsses_username;
+                    $mail->Password = app_mail_awsses_password;
+
+					$mail->SMTPOptions = array(
+						'ssl' => array(
+							'verify_peer' => false,
+							'verify_peer_name' => false,
+							'allow_self_signed' => true
+						)
+					);
+				}
+				else if(defined('app_mail_host') && defined('app_mail_port') && defined('app_mail_username') && defined('app_mail_password')){
+                    Log::write(__METHOD__.' in SMTP with '.app_mail_host.':'.app_mail_port.' via '.app_mail_username);
+                    $mail->isSMTP();
+					$mail->Host = 'tls://'.app_mail_host.':'.app_mail_port;
+                    //$mail->Hostname = app_mail_host;
+                    //$mail->Port = app_mail_port;
+                    //$mail->SMTPSecure = 'tls';
+                    $mail->SMTPAuth = true;
+                    $mail->Username = app_mail_username;
+                    $mail->Password = app_mail_password;
+
+					$mail->SMTPOptions = array(
+						'ssl' => array(
+							'verify_peer' => false,
+							'verify_peer_name' => false,
+							'allow_self_signed' => true
+						)
+					);
+                }
+                else {
+                    Log::write(__METHOD__.' in Sendmail');
+                    $mail->IsSendmail();
+                }
 
 				if($mail->Send()) {
 					Log::write(__METHOD__.' Mail sent to '.json_encode($recipients['to']));
