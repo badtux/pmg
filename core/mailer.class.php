@@ -174,9 +174,11 @@ class Mailer {
 					if(isset($from['fromName'])) { $fromName = $from['fromName']; }
 				}
 
-				Log::write(__METHOD__ . ' before');
-
 				$mail->SMTPDebug = 3;
+
+				$mail->Debugoutput = function($str, $level) {
+					Log::write(__METHOD__.' >> '.$level.' : '.$str);
+				};
 
 				if(defined('app_mail_host')){
 					Log::write('defined');
