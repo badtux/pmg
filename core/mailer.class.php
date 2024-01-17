@@ -216,7 +216,7 @@ class Mailer {
 				//$mail->SetWordWrap();
 				$usesAWSSES = $usesAppMail = 0;
 				$awsSESAllowList = [
-					'tech@ceynet.asia','transparent@ceynet.asia','milindum@gmail.com','info@malkey.lk','mail@malkey.lk','accounts@malkey.lk','viraj.abayarathna@gmail.com'
+					//'tech@ceynet.asia','transparent@ceynet.asia','milindum@gmail.com','info@malkey.lk','mail@malkey.lk','accounts@malkey.lk','viraj.abayarathna@gmail.com'
 				];
 
 				$viaAWS = $viaAppMail = ['to'=>[],'cc'=>[],'bcc'=>[]];
