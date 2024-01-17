@@ -3,3 +3,5 @@
 .buildpath
 .project
 /3rdparty/phpqrcode/cache/
+vendor
+composer.lock
