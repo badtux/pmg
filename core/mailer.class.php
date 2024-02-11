@@ -307,6 +307,7 @@ class Mailer {
 				}
 				else {
 					$mail->SmtpClose();
+					Log::write(__METHOD__.' Mail ding failed: '.$mail->ErrorInfo);
 					return $mail->ErrorInfo;
 				}
 			}
