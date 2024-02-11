@@ -264,7 +264,7 @@ class Mailer {
 					$mail->Host = 'tls://'.app_mail_awsses_host.':'.app_mail_awsses_port;
                     //$mail->Hostname = app_mail_host;
                     //$mail->Port = app_mail_port;
-                    $mail->SMTPSecure = 'tls';
+                    $mail->SMTPSecure = 'tlsv1.2';
                     $mail->SMTPAuth = true;
                     $mail->Username = app_mail_awsses_username;
                     $mail->Password = app_mail_awsses_password;
