@@ -264,18 +264,18 @@ class Mailer {
 					$mail->Host = 'tls://'.app_mail_awsses_host.':'.app_mail_awsses_port;
                     //$mail->Hostname = app_mail_host;
                     //$mail->Port = app_mail_port;
-                    //$mail->SMTPSecure = 'tls';
+                    $mail->SMTPSecure = 'tls';
                     $mail->SMTPAuth = true;
                     $mail->Username = app_mail_awsses_username;
                     $mail->Password = app_mail_awsses_password;
 
-					$mail->SMTPOptions = array(
-						'ssl' => array(
-							'verify_peer' => false,
-							'verify_peer_name' => false,
-							'allow_self_signed' => true
-						)
-					);
+					// $mail->SMTPOptions = array(
+					// 	'ssl' => array(
+					// 		'verify_peer' => false,
+					// 		'verify_peer_name' => false,
+					// 		'allow_self_signed' => true
+					// 	)
+					// );
 				}
 				else if(defined('app_mail_host') && defined('app_mail_port') && defined('app_mail_username') && defined('app_mail_password')){
                     Log::write(__METHOD__.' in SMTP with '.app_mail_host.':'.app_mail_port.' via '.app_mail_username);
