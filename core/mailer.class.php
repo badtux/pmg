@@ -261,10 +261,12 @@ class Mailer {
 				if(((bool)$usesAWSSES) && defined('app_mail_awsses_host') && defined('app_mail_awsses_port') && defined('app_mail_awsses_username') && defined('app_mail_awsses_password')){
 					Log::write(__METHOD__.' in SMTP with '.app_mail_awsses_host.':'.app_mail_awsses_port.' via '.app_mail_awsses_username);
                     $mail->isSMTP();
-					$mail->Host = 'tls://'.app_mail_awsses_host.':'.app_mail_awsses_port;
+					// $mail->Host = 'tls://'.app_mail_awsses_host.':'.app_mail_awsses_port;
+					$mail->Host = 'tls://'.app_mail_awsses_host.':587';
                     //$mail->Hostname = app_mail_host;
                     //$mail->Port = app_mail_port;
                     //$mail->SMTPSecure = 'tls';
+					$mail->SMTPSecure = 'tls';
                     $mail->SMTPAuth = true;
                     $mail->Username = app_mail_awsses_username;
                     $mail->Password = app_mail_awsses_password;
