@@ -216,6 +216,7 @@ class Mailer {
 				//$mail->SetWordWrap();
 				$usesAWSSES = $usesAppMail = 0;
 				$awsSESAllowList = [
+					'transparent@ceynet.asia'
 					//'tech@ceynet.asia','transparent@ceynet.asia','milindum@gmail.com','info@malkey.lk','mail@malkey.lk','accounts@malkey.lk','viraj.abayarathna@gmail.com'
 				];
 
