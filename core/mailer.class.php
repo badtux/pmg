@@ -216,8 +216,8 @@ class Mailer {
 				//$mail->SetWordWrap();
 				$usesAWSSES = $usesAppMail = 0;
 				$awsSESAllowList = [
-					'viraj.abayarathna@gmail.com'
-					//'tech@ceynet.asia','transparent@ceynet.asia','milindum@gmail.com','info@malkey.lk','mail@malkey.lk','accounts@malkey.lk','viraj.abayarathna@gmail.com'
+					// 'viraj.abayarathna@gmail.com'
+					'tech@ceynet.asia','transparent@ceynet.asia','milindum@gmail.com','info@malkey.lk','mail@malkey.lk','accounts@malkey.lk','viraj.abayarathna@gmail.com'
 				];
 
 				$viaAWS = $viaAppMail = ['to'=>[],'cc'=>[],'bcc'=>[]];
@@ -261,8 +261,7 @@ class Mailer {
 				if(((bool)$usesAWSSES) && defined('app_mail_awsses_host') && defined('app_mail_awsses_port') && defined('app_mail_awsses_username') && defined('app_mail_awsses_password')){
 					Log::write(__METHOD__.' in SMTP with '.app_mail_awsses_host.':'.app_mail_awsses_port.' via '.app_mail_awsses_username);
                     $mail->isSMTP();
-					// $mail->Host = 'tls://'.app_mail_awsses_host.':'.app_mail_awsses_port;
-					$mail->Host = 'tls://'.app_mail_awsses_host.':587';
+					$mail->Host = 'tls://'.app_mail_awsses_host.':'.app_mail_awsses_port;
                     //$mail->Hostname = app_mail_host;
                     //$mail->Port = app_mail_port;
                     //$mail->SMTPSecure = 'tls';
